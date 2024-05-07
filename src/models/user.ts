@@ -23,13 +23,13 @@ export class User extends Common {
 
   @ForeignKey(() => Group)
   @Column({ field: 'group_id', type: DataType.BIGINT.UNSIGNED })
-  group_id!: number | bigint;
+  groupId!: number | bigint;
 
   @Column({ field: 'started_date', type: DataType.DATE })
-  started_date!: number;
+  startedDate!: number;
 
   @Column({ field: 'position_id', type: DataType.TINYINT.UNSIGNED })
-  position_id!: factory.Position;
+  positionId!: factory.Position;
 
   @BelongsTo(() => Group)
   group?: Group;

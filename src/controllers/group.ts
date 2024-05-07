@@ -11,11 +11,18 @@ class GroupController extends BaseController {
     this.groupRepo = new GroupRepository(this.db);
 
     this.search = this.nextWrapper(this.search);
+    this.list = this.nextWrapper(this.list);
   }
   public search = async (req: Request, res: Response, _next: NextFunction) => {
     const result: any = await this.groupRepo.search({
       ...this.getOffsetLimit(req),
     });
+
+    this.ok(res, result);
+  };
+
+  public list = async (_req: Request, res: Response, _next: NextFunction) => {
+    const result: any = await this.groupRepo.list();
 
     this.ok(res, result);
   };

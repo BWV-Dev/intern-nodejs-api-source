@@ -1,6 +1,8 @@
+import dayjs from 'dayjs';
 import * as _ from 'lodash';
 import { FindOptions, IncludeOptions, Op, WhereOptions } from 'sequelize';
 
+import { errors } from '../factory';
 import { IUserSearchParams, UserForm } from '../factory/user';
 import { hashPassword } from '../utils/bcrypt';
 import { makeAmbiguousWhere } from '../utils/query';
@@ -36,7 +38,12 @@ export class UserRepository extends BaseRepository {
 
     const findOption: FindOptions = {
       include: [groupInclude],
-      order: [['id', 'ASC']],
+      order: [
+        ['name', 'ASC'],
+        ['started_date', 'ASC'],
+        ['id', 'ASC'],
+      ],
+      attributes: { exclude: ['password', 'deleted_date'] },
     };
 
     if (params) {
@@ -66,12 +73,21 @@ export class UserRepository extends BaseRepository {
 
   public async create(data: UserForm) {
     try {
+      if (
+        await this.model.findOne({
+          where: {
+            email: data.email,
+          },
+        })
+      ) {
+        throw new errors.Argument(
+          'emailExist',
+          'Emailすでにメールアドレスは登録されています。',
+        );
+      }
+
       const result = await this.model.create({
-        email: data.email,
-        name: data.name,
-        group_id: data.groupId,
-        position_id: data.positionId,
-        started_date: data.startedDate,
+        ...data,
         password: await hashPassword(data.password),
       });
 
@@ -79,5 +95,44 @@ export class UserRepository extends BaseRepository {
     } catch (error) {
       throw error;
     }
+  }
+
+  public async update(userId: number | string, data: UserForm) {
+    if (
+      await this.model.findOne({
+        where: {
+          email: data.email,
+          id: {
+            [Op.not]: userId,
+          },
+        },
+      })
+    ) {
+      throw new errors.Argument(
+        'emailExist',
+        'Emailすでにメールアドレスは登録されています。',
+      );
+    }
+
+    await this.model.update(
+      {
+        ...data,
+        password: data.password ? await hashPassword(data.password) : undefined,
+      },
+      {
+        where: { id: userId },
+      },
+    );
+  }
+
+  public async delete(userId: number | string) {
+    await this.model.update(
+      {
+        deletedDate: dayjs(),
+      },
+      {
+        where: { id: userId },
+      },
+    );
   }
 }

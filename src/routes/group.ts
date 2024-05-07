@@ -8,5 +8,7 @@ export default function (db: SQLize) {
 
   groupRouter.get('/', groupController.search);
 
+  groupRouter.get('/list', groupController.list);
+
   return groupRouter;
 }

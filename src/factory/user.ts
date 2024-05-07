@@ -1,4 +1,4 @@
-import { FormData,ICommonAttr, ICommonSearchOption } from './_common';
+import { FormData, ICommonAttr, ICommonSearchOption } from './_common';
 
 export enum Position {
   Director = 0,

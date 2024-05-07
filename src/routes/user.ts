@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import UserController from '../controllers/user';
-import { UserCreateDTO } from '../dto/user';
+import { UserCreateDTO, UserUpdateDTO } from '../dto/user';
 import { validationMiddleware } from '../middlewares/validation';
 
 export default function (db: SQLize) {
@@ -26,6 +26,20 @@ export default function (db: SQLize) {
     validationMiddleware(UserCreateDTO),
     userController.create,
   );
+
+  /**
+   * User update
+   */
+  userRouter.put(
+    '/:id([0-9]+)',
+    validationMiddleware(UserUpdateDTO),
+    userController.update,
+  );
+
+  /**
+   * User delete
+   */
+  userRouter.delete('/:id([0-9]+)', userController.delete);
 
   return userRouter;
 }

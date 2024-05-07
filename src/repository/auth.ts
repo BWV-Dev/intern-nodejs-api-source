@@ -42,7 +42,7 @@ export class AuthReposiroty extends BaseRepository {
       id: user.id,
       email: user.email,
       name: user.name,
-      position_id: user.position_id,
+      positionId: user.positionId,
     };
   }
 }

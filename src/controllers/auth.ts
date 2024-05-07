@@ -26,7 +26,7 @@ class AuthController extends BaseController {
     const token = await this.signToken({
       id: Number(user.id),
       name: user.name,
-      position_id: Number(user.position_id),
+      positionId: Number(user.positionId),
     });
 
     res.json({
@@ -40,7 +40,7 @@ class AuthController extends BaseController {
   public signToken = async (data: {
     id: number;
     name: string;
-    position_id: number;
+    positionId: number;
   }) => {
     return sign(data, this.jwtSecret, {
       expiresIn: this.expiresIn,

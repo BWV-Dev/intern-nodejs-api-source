@@ -32,4 +32,14 @@ export class GroupRepository extends BaseRepository {
 
     return findOption;
   }
+
+  public async list() {
+    const findOption: FindOptions = {
+      attributes: ['id', 'name'],
+      order: [['name', 'ASC']],
+    };
+    const groupList = await this.model.findAndCountAll(findOption);
+
+    return groupList;
+  }
 }
