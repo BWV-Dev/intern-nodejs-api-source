@@ -11,7 +11,7 @@ export default function (db: SQLize) {
   const router = Router();
   router.use('/auth', authRouter(db));
 
-  router.use(jwtAuthentication);
+  router.use(jwtAuthentication(db));
   router.use('/user', userRouter(db));
   router.use('/group', groupRouter(db));
 

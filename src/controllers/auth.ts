@@ -46,6 +46,23 @@ class AuthController extends BaseController {
       expiresIn: this.expiresIn,
     });
   };
+
+  public me = async (req: Request, res: Response, _next: NextFunction) => {
+    const user = await this.authRepo.me(req.params.id);
+
+    const token = await this.signToken({
+      id: Number(user.id),
+      name: user.name,
+      positionId: Number(user.positionId),
+    });
+
+    res.json({
+      ...user,
+      token,
+    });
+
+    req.user = <any>user;
+  };
 }
 
 export default AuthController;

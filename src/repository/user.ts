@@ -135,4 +135,8 @@ export class UserRepository extends BaseRepository {
       },
     );
   }
+
+  public async getUserInfo(userId: number | string) {
+    return await this.model.findByPk(userId);
+  }
 }

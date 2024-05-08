@@ -14,5 +14,7 @@ export default function (db: SQLize) {
     authController.login,
   );
 
+  authRouter.get('/:id([0-9]+)', authController.me);
+
   return authRouter;
 }

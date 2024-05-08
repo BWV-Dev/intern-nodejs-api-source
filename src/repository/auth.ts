@@ -45,4 +45,19 @@ export class AuthReposiroty extends BaseRepository {
       positionId: user.positionId,
     };
   }
+
+  public async me(id: number | string) {
+    const user = await this.model.findByPk(id);
+
+    if (_.isNil(user)) {
+      throw new errors.Argument('user', 'User not existed');
+    }
+
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      positionId: user.positionId,
+    };
+  }
 }
