@@ -4,6 +4,7 @@ import apiErrorHandler from '../middlewares/apiErrorHandler';
 import jwtAuthentication from '../middlewares/jwtAuthentication';
 import notFoundHandler from '../middlewares/notFoundHandler';
 import authRouter from './auth';
+import fileRouter from './file';
 import groupRouter from './group';
 import userRouter from './user';
 
@@ -14,6 +15,7 @@ export default function (db: SQLize) {
   router.use(jwtAuthentication);
   router.use('/user', userRouter(db));
   router.use('/group', groupRouter(db));
+  router.use('/file', fileRouter(db));
 
   router.use(notFoundHandler);
   router.use(apiErrorHandler);

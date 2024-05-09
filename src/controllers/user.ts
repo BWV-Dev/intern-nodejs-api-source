@@ -12,6 +12,9 @@ class UserController extends BaseController {
     this.userRepo = new UserRepository(this.db);
 
     this.search = this.nextWrapper(this.search);
+    this.create = this.nextWrapper(this.create);
+    this.update = this.nextWrapper(this.update);
+    this.delete = this.nextWrapper(this.delete);
   }
 
   public search = async (req: Request, res: Response, _next: NextFunction) => {
@@ -38,6 +41,23 @@ class UserController extends BaseController {
 
     this.created(res, result);
   };
-}
 
+  public update = async (req: Request, res: Response, _next: NextFunction) => {
+    const userId = req.params?.id;
+
+    const result = await this.userRepo.update(
+      mapper.formDataCreate(req),
+      Number(userId),
+    );
+
+    this.created(res, result);
+  };
+
+  public delete = async (req: Request, res: Response, _next: NextFunction) => {
+    const userId = req.params?.id;
+    const result = await this.userRepo.delete(Number(userId));
+
+    res.json(result);
+  };
+}
 export default UserController;

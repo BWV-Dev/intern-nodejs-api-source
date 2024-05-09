@@ -1,7 +1,14 @@
+import dayjs from 'dayjs';
 import * as _ from 'lodash';
 import { FindOptions, IncludeOptions, Op, WhereOptions } from 'sequelize';
 
-import { IUserSearchParams, UserForm } from '../factory/user';
+import { validatorMessages } from '../constants';
+import { errors } from '../factory';
+import {
+  IUserSearchParams,
+  PayloadFormUpdate,
+  UserForm,
+} from '../factory/user';
 import { hashPassword } from '../utils/bcrypt';
 import { makeAmbiguousWhere } from '../utils/query';
 import { BaseRepository } from './_base';
@@ -65,19 +72,68 @@ export class UserRepository extends BaseRepository {
   }
 
   public async create(data: UserForm) {
-    try {
-      const result = await this.model.create({
-        email: data.email,
-        name: data.name,
-        group_id: data.groupId,
-        position_id: data.positionId,
-        started_date: data.startedDate,
-        password: await hashPassword(data.password),
-      });
+    const isEmailExist = await this.models.User.findOne({
+      where: { email: data.email },
+    });
 
-      return { id: result.id };
-    } catch (error) {
-      throw error;
+    if (isEmailExist) {
+      throw new errors.Argument('Email', validatorMessages.checkEmailExist);
     }
+
+    const result = await this.model.create({
+      email: data.email,
+      name: data.name,
+      group_id: data.groupId,
+      position_id: data.positionId,
+      started_date: data.startedDate,
+      password: await hashPassword(data.password),
+    });
+
+    return { id: result.id };
+  }
+
+  public async update(data: UserForm, userId: number) {
+    const isEmailExist = await this.models.User.findAll({
+      where: { email: data.email, [Op.not]: [{ id: userId }] },
+    });
+
+    if (isEmailExist.length >= 1) {
+      throw new errors.Argument('Email', validatorMessages.checkEmailExist);
+    }
+
+    const payload: PayloadFormUpdate = {
+      email: data.email,
+      name: data.name,
+      group_id: data.groupId,
+      position_id: data.positionId,
+      started_date: data.startedDate,
+    };
+
+    if (!_.isNil(data.password)) {
+      payload.password = await hashPassword(data.password);
+    }
+
+    const result = await this.model.update(payload, { where: { id: userId } });
+
+    return result;
+  }
+
+  public async delete(userId: number) {
+    const isEmailExist = await this.models.User.findOne({
+      where: { id: userId },
+    });
+
+    if (!isEmailExist) {
+      throw new errors.Argument('Email', validatorMessages.emailNotExist);
+    }
+
+    const currentDate = dayjs();
+
+    const result = await this.model.update(
+      { deletedDate: currentDate },
+      { where: { id: userId } },
+    );
+
+    return result;
   }
 }

@@ -30,6 +30,7 @@ export const messages = {
   invalidEmailAddressError: '有効なメールアドレスではありません。',
   invalidPassAuthKeyError:
     '無効なURLです。パスワード再発行メールから1時間を経過している場合、再度パスワードの再発行を行って下さい。',
+  EBT096: '登録・更新・削除処理に成功しました。',
 };
 
 export const validatorMessages = {
@@ -44,5 +45,20 @@ export const validatorMessages = {
     `Allow only 1 field from [${columns}].`,
   checkIsPositiveInteger: (column: string) =>
     `Only accept positive number for ${column}.`,
-  checkIsValid: (column: string) => `Please enter a valid ${column}`,
+  checkIsValid: (column: string) => `Please enter a valid ${column}.`,
+  checkEmailExist: 'Email have been exist.',
+  emailNotExist: 'Email not exist',
+  EBT033: (formatFile: string) =>
+    `ファイル形式が誤っています。${formatFile}を選択してください。`,
+  EBT034: (fileSize: string) =>
+    `ファイルのサイズ制限${fileSize}を超えています。`,
+  EBT095: 'インポートファイルの中身が正しくありません。',
+  E009: (name: string) => `${name} is duplicated.`,
 };
+
+export enum Position {
+  'Director',
+  'Group Leader',
+  'Leader',
+  'Member',
+}
