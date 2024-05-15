@@ -1,5 +1,7 @@
 import 'reflect-metadata';
 
+import { IsOptional } from 'class-validator';
+
 import { IsEmail, IsNotEmpty, MaxLength } from '../class-validator';
 
 export class LoginDTO {
@@ -33,5 +35,11 @@ export class UserCreateDTO {
 
   @MaxLength(20, 'Password')
   @IsNotEmpty('Password')
+  public password: string;
+}
+
+export class UserUpdateDTO extends UserCreateDTO {
+  @MaxLength(20, 'Password')
+  @IsOptional()
   public password: string;
 }

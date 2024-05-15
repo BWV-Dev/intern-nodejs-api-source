@@ -1,4 +1,4 @@
-import { FormData,ICommonAttr, ICommonSearchOption } from './_common';
+import { FormData, ICommonAttr, ICommonSearchOption } from './_common';
 
 export enum Position {
   Director = 0,
@@ -25,3 +25,26 @@ export interface IUserSearchParams extends ICommonSearchOption {
 }
 
 export declare type UserForm = FormData<IUserMainAttr>;
+
+export interface PayloadFormUpdate {
+  id?: number;
+  email: string;
+  name: string;
+  group_id: string | number;
+  position_id: string | number;
+  started_date: string;
+  password?: string;
+  updatedDate?: string;
+  deletedDate?: string;
+}
+
+export interface DataImportType {
+  delete: string | null;
+  email: string;
+  groupId: string;
+  ID: string | null;
+  name: string;
+  password: string;
+  positionId: string;
+  startedDate: string;
+}

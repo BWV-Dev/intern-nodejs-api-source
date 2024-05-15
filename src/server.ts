@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000;
 async function main() {
   dayjs.extend(utc);
   dayjs.extend(timezone);
-  dayjs.tz.setDefault('Asia/Tokyo');
+  dayjs.tz.setDefault('Asia/Ho_Chi_Minh');
 
   const app = express();
   const sequelize = await createClient();

@@ -28,6 +28,7 @@ const createClient = async () => {
       console.log(`${sql.replace(/\s\s+/g, ' ')} (took ${time}ms)`);
     },
     models: Object.values(models),
+    timezone: '+07:00',
   });
 
   sequelize
